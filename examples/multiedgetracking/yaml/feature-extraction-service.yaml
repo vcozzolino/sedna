@@ -23,7 +23,7 @@ spec:
         name:  feature-extraction
         env:
         - name: KAFKA_BIND_IPS  # a list of Kafka brokers IP, separated by pipe (|)
-          value: "7.182.9.110|kafka-service"
+          value: "MASTER_NODE_IP|kafka-service"
         - name: KAFKA_BIND_PORTS # a list of Kafka brokers port, separated by pipe (|)
           value: "9092|9092" 
         - name: input_shape
