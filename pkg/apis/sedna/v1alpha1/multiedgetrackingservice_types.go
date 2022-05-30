@@ -18,51 +18,77 @@ package v1alpha1
 
 import (
 	appsv1 "k8s.io/api/apps/v1"
+	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-// +kubebuilder:resource:shortName=fe
+// +kubebuilder:resource:shortName=mi
 // +kubebuilder:subresource:status
 
-type FeatureExtractionService struct {
+type MultiEdgeTrackingService struct {
 	metav1.TypeMeta `json:",inline"`
 
 	metav1.ObjectMeta `json:"metadata"`
 
-	Spec   FeatureExtractionServiceSpec   `json:"spec"`
-	Status FeatureExtractionServiceStatus `json:"status,omitempty"`
+	Spec   MultiEdgeTrackingServiceSpec   `json:"spec"`
+	Status MultiEdgeTrackingServiceStatus `json:"status,omitempty"`
 }
 
-// FeatureExtractionServiceSpec is a description of a FeatureExtractionService
-type FeatureExtractionServiceSpec struct {
+// MultiEdgeTrackingServiceSpec is a description of a MultiEdgeTrackingService
+type MultiEdgeTrackingServiceSpec struct {
+	KafkaSupport            bool                     `json:"kafkaSupport,omitempty"`
+	ObjectQueryWorker       ObjectQueryWorker        `json:"objectQueryWorker"`
+	VideoAnalyticsWorker    VideoAnalyticsWorker     `json:"videoAnalyticsWorker"`
+	FeatureExtractionWorker FeatureExtractionService `json:"featureExtractionWorker"`
+}
+
+type ObjectQueryWorker struct {
+	batchv1.JobSpec `json:",inline"`
+	KafkaSupport    bool `json:"kafkaSupport,omitempty"`
+}
+
+// VideoAnalyticsWorker is a description of a VideoAnalyticsWorker
+type VideoAnalyticsWorker struct {
+	batchv1.JobSpec `json:",inline"`
+	KafkaSupport    bool                `json:"kafkaSupport,omitempty"`
+	Model           VideoAnalyticsModel `json:"model"`
+}
+
+// VideoAnalyticsModel describes the detection model
+type VideoAnalyticsModel struct {
+	Name string `json:"name"`
+}
+
+// FeatureExtractionService is a description of a FeatureExtractionService
+type FeatureExtractionService struct {
 	KafkaSupport          bool    `json:"kafkaSupport,omitempty"`
 	Model                 FEModel `json:"model"`
 	appsv1.DeploymentSpec `json:",inline"`
 }
 
-// Describes the feature extraction model
+// FEModel Describes the feature extraction model
 type FEModel struct {
 	Name string `json:"name"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// FeatureExtractionServiceList is a list of FeatureExtractionService.
-type FeatureExtractionServiceList struct {
+// MultiEdgeTrackingServiceList is a list of MultiEdgeTrackingService.
+type MultiEdgeTrackingServiceList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata"`
-	Items           []FeatureExtractionService `json:"items"`
+	Items           []MultiEdgeTrackingService `json:"items"`
 }
 
-// FeatureExtractionServiceStatus represents the current state of a feature extraction service.
-type FeatureExtractionServiceStatus struct {
+// MultiEdgeTrackingServiceStatus represents the current state of a joint inference service.
+type MultiEdgeTrackingServiceStatus struct {
 
 	// The latest available observations of a joint inference service's current state.
 	// +optional
-	Conditions []FeatureExtractionServiceCondition `json:"conditions,omitempty"`
+	Conditions []MultiEdgeTrackingServiceCondition `json:"conditions,omitempty"`
 
 	// Represents time when the service was acknowledged by the service controller.
 	// It is not guaranteed to be set in happens-before order across separate operations.
@@ -78,29 +104,29 @@ type FeatureExtractionServiceStatus struct {
 	// +optional
 	Failed int32 `json:"failed"`
 
-	// Metrics of the feature extraction service.
+	// Metrics of the joint inference service.
 	Metrics []Metric `json:"metrics,omitempty"`
 }
 
-// FeatureExtractionServiceConditionType defines the condition type
-type FeatureExtractionServiceConditionType string
+// MultiEdgeTrackingServiceConditionType defines the condition type
+type MultiEdgeTrackingServiceConditionType string
 
 // These are valid conditions of a service.
 const (
-	// FeatureExtractionServiceCondPending means the service has been accepted by the system,
+	// MultiEdgeTrackingServiceCondPending means the service has been accepted by the system,
 	// but one or more of the workers has not been started.
-	FeatureExtractionServiceCondPending FeatureExtractionServiceConditionType = "Pending"
-	// FeatureExtractionServiceCondFailed means the service has failed its execution.
-	FeatureExtractionServiceCondFailed FeatureExtractionServiceConditionType = "Failed"
-	// FeatureExtractionServiceCondRunning means the service has been ready.
-	FeatureExtractionServiceCondRunning FeatureExtractionServiceConditionType = "Running"
+	MultiEdgeTrackingServiceCondPending MultiEdgeTrackingServiceConditionType = "Pending"
+	// MultiEdgeTrackingServiceCondFailed means the service has failed its execution.
+	MultiEdgeTrackingServiceCondFailed MultiEdgeTrackingServiceConditionType = "Failed"
+	// MultiEdgeTrackingServiceCondRunning means the service has been ready.
+	MultiEdgeTrackingServiceCondRunning MultiEdgeTrackingServiceConditionType = "Running"
 )
 
-// FeatureExtractionServiceCondition describes current state of a service.
+// MultiEdgeTrackingServiceCondition describes current state of a service.
 // see https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#typical-status-properties for details.
-type FeatureExtractionServiceCondition struct {
+type MultiEdgeTrackingServiceCondition struct {
 	// Type of service condition, Complete or Failed.
-	Type FeatureExtractionServiceConditionType `json:"type"`
+	Type MultiEdgeTrackingServiceConditionType `json:"type"`
 	// Status of the condition, one of True, False, Unknown.
 	Status v1.ConditionStatus `json:"status"`
 	// last time we got an update on a given condition

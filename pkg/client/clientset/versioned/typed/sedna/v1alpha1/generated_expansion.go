@@ -20,8 +20,6 @@ package v1alpha1
 
 type DatasetExpansion interface{}
 
-type FeatureExtractionServiceExpansion interface{}
-
 type FederatedLearningJobExpansion interface{}
 
 type IncrementalLearningJobExpansion interface{}
@@ -32,10 +30,12 @@ type LifelongLearningJobExpansion interface{}
 
 type ModelExpansion interface{}
 
+type MultiEdgeTrackingServiceExpansion interface{}
+
+type ObjectAnalyticsJobExpansion interface{}
+
+type ObjectQueryJobExpansion interface{}
+
 type ObjectSearchServiceExpansion interface{}
 
 type ObjectTrackingServiceExpansion interface{}
-
-type ReidJobExpansion interface{}
-
-type VideoAnalyticsJobExpansion interface{}

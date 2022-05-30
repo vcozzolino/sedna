@@ -26,14 +26,6 @@ type DatasetListerExpansion interface{}
 // DatasetNamespaceLister.
 type DatasetNamespaceListerExpansion interface{}
 
-// FeatureExtractionServiceListerExpansion allows custom methods to be added to
-// FeatureExtractionServiceLister.
-type FeatureExtractionServiceListerExpansion interface{}
-
-// FeatureExtractionServiceNamespaceListerExpansion allows custom methods to be added to
-// FeatureExtractionServiceNamespaceLister.
-type FeatureExtractionServiceNamespaceListerExpansion interface{}
-
 // FederatedLearningJobListerExpansion allows custom methods to be added to
 // FederatedLearningJobLister.
 type FederatedLearningJobListerExpansion interface{}
@@ -74,6 +66,30 @@ type ModelListerExpansion interface{}
 // ModelNamespaceLister.
 type ModelNamespaceListerExpansion interface{}
 
+// MultiEdgeTrackingServiceListerExpansion allows custom methods to be added to
+// MultiEdgeTrackingServiceLister.
+type MultiEdgeTrackingServiceListerExpansion interface{}
+
+// MultiEdgeTrackingServiceNamespaceListerExpansion allows custom methods to be added to
+// MultiEdgeTrackingServiceNamespaceLister.
+type MultiEdgeTrackingServiceNamespaceListerExpansion interface{}
+
+// ObjectAnalyticsJobListerExpansion allows custom methods to be added to
+// ObjectAnalyticsJobLister.
+type ObjectAnalyticsJobListerExpansion interface{}
+
+// ObjectAnalyticsJobNamespaceListerExpansion allows custom methods to be added to
+// ObjectAnalyticsJobNamespaceLister.
+type ObjectAnalyticsJobNamespaceListerExpansion interface{}
+
+// ObjectQueryJobListerExpansion allows custom methods to be added to
+// ObjectQueryJobLister.
+type ObjectQueryJobListerExpansion interface{}
+
+// ObjectQueryJobNamespaceListerExpansion allows custom methods to be added to
+// ObjectQueryJobNamespaceLister.
+type ObjectQueryJobNamespaceListerExpansion interface{}
+
 // ObjectSearchServiceListerExpansion allows custom methods to be added to
 // ObjectSearchServiceLister.
 type ObjectSearchServiceListerExpansion interface{}
@@ -89,19 +105,3 @@ type ObjectTrackingServiceListerExpansion interface{}
 // ObjectTrackingServiceNamespaceListerExpansion allows custom methods to be added to
 // ObjectTrackingServiceNamespaceLister.
 type ObjectTrackingServiceNamespaceListerExpansion interface{}
-
-// ReidJobListerExpansion allows custom methods to be added to
-// ReidJobLister.
-type ReidJobListerExpansion interface{}
-
-// ReidJobNamespaceListerExpansion allows custom methods to be added to
-// ReidJobNamespaceLister.
-type ReidJobNamespaceListerExpansion interface{}
-
-// VideoAnalyticsJobListerExpansion allows custom methods to be added to
-// VideoAnalyticsJobLister.
-type VideoAnalyticsJobListerExpansion interface{}
-
-// VideoAnalyticsJobNamespaceListerExpansion allows custom methods to be added to
-// VideoAnalyticsJobNamespaceLister.
-type VideoAnalyticsJobNamespaceListerExpansion interface{}

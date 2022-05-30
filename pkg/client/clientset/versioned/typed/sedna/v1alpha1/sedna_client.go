@@ -27,16 +27,16 @@ import (
 type SednaV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	DatasetsGetter
-	FeatureExtractionServicesGetter
 	FederatedLearningJobsGetter
 	IncrementalLearningJobsGetter
 	JointInferenceServicesGetter
 	LifelongLearningJobsGetter
 	ModelsGetter
+	MultiEdgeTrackingServicesGetter
+	ObjectAnalyticsJobsGetter
+	ObjectQueryJobsGetter
 	ObjectSearchServicesGetter
 	ObjectTrackingServicesGetter
-	ReidJobsGetter
-	VideoAnalyticsJobsGetter
 }
 
 // SednaV1alpha1Client is used to interact with features provided by the sedna.io group.
@@ -46,10 +46,6 @@ type SednaV1alpha1Client struct {
 
 func (c *SednaV1alpha1Client) Datasets(namespace string) DatasetInterface {
 	return newDatasets(c, namespace)
-}
-
-func (c *SednaV1alpha1Client) FeatureExtractionServices(namespace string) FeatureExtractionServiceInterface {
-	return newFeatureExtractionServices(c, namespace)
 }
 
 func (c *SednaV1alpha1Client) FederatedLearningJobs(namespace string) FederatedLearningJobInterface {
@@ -72,20 +68,24 @@ func (c *SednaV1alpha1Client) Models(namespace string) ModelInterface {
 	return newModels(c, namespace)
 }
 
+func (c *SednaV1alpha1Client) MultiEdgeTrackingServices(namespace string) MultiEdgeTrackingServiceInterface {
+	return newMultiEdgeTrackingServices(c, namespace)
+}
+
+func (c *SednaV1alpha1Client) ObjectAnalyticsJobs(namespace string) ObjectAnalyticsJobInterface {
+	return newObjectAnalyticsJobs(c, namespace)
+}
+
+func (c *SednaV1alpha1Client) ObjectQueryJobs(namespace string) ObjectQueryJobInterface {
+	return newObjectQueryJobs(c, namespace)
+}
+
 func (c *SednaV1alpha1Client) ObjectSearchServices(namespace string) ObjectSearchServiceInterface {
 	return newObjectSearchServices(c, namespace)
 }
 
 func (c *SednaV1alpha1Client) ObjectTrackingServices(namespace string) ObjectTrackingServiceInterface {
 	return newObjectTrackingServices(c, namespace)
-}
-
-func (c *SednaV1alpha1Client) ReidJobs(namespace string) ReidJobInterface {
-	return newReidJobs(c, namespace)
-}
-
-func (c *SednaV1alpha1Client) VideoAnalyticsJobs(namespace string) VideoAnalyticsJobInterface {
-	return newVideoAnalyticsJobs(c, namespace)
 }
 
 // NewForConfig creates a new SednaV1alpha1Client for the given config.

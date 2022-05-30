@@ -32,59 +32,59 @@ import (
 	cache "k8s.io/client-go/tools/cache"
 )
 
-// ReidJobInformer provides access to a shared informer and lister for
-// ReidJobs.
-type ReidJobInformer interface {
+// ObjectQueryJobInformer provides access to a shared informer and lister for
+// ObjectQueryJobs.
+type ObjectQueryJobInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1alpha1.ReidJobLister
+	Lister() v1alpha1.ObjectQueryJobLister
 }
 
-type reidJobInformer struct {
+type objectQueryJobInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	namespace        string
 }
 
-// NewReidJobInformer constructs a new informer for ReidJob type.
+// NewObjectQueryJobInformer constructs a new informer for ObjectQueryJob type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewReidJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredReidJobInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewObjectQueryJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredObjectQueryJobInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredReidJobInformer constructs a new informer for ReidJob type.
+// NewFilteredObjectQueryJobInformer constructs a new informer for ObjectQueryJob type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredReidJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredObjectQueryJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SednaV1alpha1().ReidJobs(namespace).List(context.TODO(), options)
+				return client.SednaV1alpha1().ObjectQueryJobs(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SednaV1alpha1().ReidJobs(namespace).Watch(context.TODO(), options)
+				return client.SednaV1alpha1().ObjectQueryJobs(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&sednav1alpha1.ReidJob{},
+		&sednav1alpha1.ObjectQueryJob{},
 		resyncPeriod,
 		indexers,
 	)
 }
 
-func (f *reidJobInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredReidJobInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+func (f *objectQueryJobInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+	return NewFilteredObjectQueryJobInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
-func (f *reidJobInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&sednav1alpha1.ReidJob{}, f.defaultInformer)
+func (f *objectQueryJobInformer) Informer() cache.SharedIndexInformer {
+	return f.factory.InformerFor(&sednav1alpha1.ObjectQueryJob{}, f.defaultInformer)
 }
 
-func (f *reidJobInformer) Lister() v1alpha1.ReidJobLister {
-	return v1alpha1.NewReidJobLister(f.Informer().GetIndexer())
+func (f *objectQueryJobInformer) Lister() v1alpha1.ObjectQueryJobLister {
+	return v1alpha1.NewObjectQueryJobLister(f.Informer().GetIndexer())
 }

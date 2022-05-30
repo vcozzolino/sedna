@@ -32,59 +32,59 @@ import (
 	cache "k8s.io/client-go/tools/cache"
 )
 
-// VideoAnalyticsJobInformer provides access to a shared informer and lister for
-// VideoAnalyticsJobs.
-type VideoAnalyticsJobInformer interface {
+// MultiEdgeTrackingServiceInformer provides access to a shared informer and lister for
+// MultiEdgeTrackingServices.
+type MultiEdgeTrackingServiceInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1alpha1.VideoAnalyticsJobLister
+	Lister() v1alpha1.MultiEdgeTrackingServiceLister
 }
 
-type videoAnalyticsJobInformer struct {
+type multiEdgeTrackingServiceInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	namespace        string
 }
 
-// NewVideoAnalyticsJobInformer constructs a new informer for VideoAnalyticsJob type.
+// NewMultiEdgeTrackingServiceInformer constructs a new informer for MultiEdgeTrackingService type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewVideoAnalyticsJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredVideoAnalyticsJobInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewMultiEdgeTrackingServiceInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredMultiEdgeTrackingServiceInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredVideoAnalyticsJobInformer constructs a new informer for VideoAnalyticsJob type.
+// NewFilteredMultiEdgeTrackingServiceInformer constructs a new informer for MultiEdgeTrackingService type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredVideoAnalyticsJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredMultiEdgeTrackingServiceInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SednaV1alpha1().VideoAnalyticsJobs(namespace).List(context.TODO(), options)
+				return client.SednaV1alpha1().MultiEdgeTrackingServices(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SednaV1alpha1().VideoAnalyticsJobs(namespace).Watch(context.TODO(), options)
+				return client.SednaV1alpha1().MultiEdgeTrackingServices(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&sednav1alpha1.VideoAnalyticsJob{},
+		&sednav1alpha1.MultiEdgeTrackingService{},
 		resyncPeriod,
 		indexers,
 	)
 }
 
-func (f *videoAnalyticsJobInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredVideoAnalyticsJobInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+func (f *multiEdgeTrackingServiceInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+	return NewFilteredMultiEdgeTrackingServiceInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
-func (f *videoAnalyticsJobInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&sednav1alpha1.VideoAnalyticsJob{}, f.defaultInformer)
+func (f *multiEdgeTrackingServiceInformer) Informer() cache.SharedIndexInformer {
+	return f.factory.InformerFor(&sednav1alpha1.MultiEdgeTrackingService{}, f.defaultInformer)
 }
 
-func (f *videoAnalyticsJobInformer) Lister() v1alpha1.VideoAnalyticsJobLister {
-	return v1alpha1.NewVideoAnalyticsJobLister(f.Informer().GetIndexer())
+func (f *multiEdgeTrackingServiceInformer) Lister() v1alpha1.MultiEdgeTrackingServiceLister {
+	return v1alpha1.NewMultiEdgeTrackingServiceLister(f.Informer().GetIndexer())
 }

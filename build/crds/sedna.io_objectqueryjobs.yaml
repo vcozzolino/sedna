@@ -1,0 +1,91 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: objectqueryjobs.sedna.io
+spec:
+  group: sedna.io
+  names:
+    kind: ObjectQueryJob
+    listKind: ObjectQueryJobList
+    plural: objectqueryjobs
+    singular: objectqueryjob
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ObjectQueryJob describes the Object query jobs.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          spec:
+            description: ObjectQueryJobSpec is a description of ObjectQueryJobSpec
+            properties:
+              description:
+                description: The following are optional fields for the model
+                type: string
+              searchRule:
+                properties:
+                  withMask:
+                    type: boolean
+                required:
+                - withMask
+                type: object
+              searchTargets:
+                items:
+                  properties:
+                    searchInCameras:
+                      items:
+                        type: string
+                      type: array
+                    targetImagesDir:
+                      type: string
+                  required:
+                  - searchInCameras
+                  - targetImagesDir
+                  type: object
+                type: array
+            required:
+            - description
+            - searchRule
+            - searchTargets
+            type: object
+          status:
+            description: ObjectQueryJobStatus is a description of ObjectQueryJobStatus
+            properties:
+              completionTime:
+                description: Represents time when the job was completed. It is not
+                  guaranteed to be set in happens-before order across separate operations.
+                  It is represented in RFC3339 form and is in UTC.
+                format: date-time
+                type: string
+              startTime:
+                format: date-time
+                type: string
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

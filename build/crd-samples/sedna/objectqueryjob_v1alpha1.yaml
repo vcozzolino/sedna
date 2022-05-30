@@ -1,0 +1,17 @@
+apiVersion: sedna.io/v1alpha1
+kind: ObjectQueryJob
+metadata:
+  name: object-query-job1
+spec:
+  targetImages: "obs://reid/targets_images/person_a"
+  searchInCameras: [ # cameraID?
+    "uuid_xxxxxxxxxxxxxxxxxxxxx1",
+    "uuid_xxxxxxxxxxxxxxxxxxxxx2"
+  ]
+  searchInLocation: "shenzhen"
+  startTime: "yyyy-MM-dd HH:mm:ss"
+  endTime: "yyyy-MM-dd HH:mm:ss"
+  similarityThreshold: 0.75
+  searchRule:
+    wearMask: True
+    relativeDistance: 0.0

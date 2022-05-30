@@ -32,59 +32,59 @@ import (
 	cache "k8s.io/client-go/tools/cache"
 )
 
-// FeatureExtractionServiceInformer provides access to a shared informer and lister for
-// FeatureExtractionServices.
-type FeatureExtractionServiceInformer interface {
+// ObjectAnalyticsJobInformer provides access to a shared informer and lister for
+// ObjectAnalyticsJobs.
+type ObjectAnalyticsJobInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1alpha1.FeatureExtractionServiceLister
+	Lister() v1alpha1.ObjectAnalyticsJobLister
 }
 
-type featureExtractionServiceInformer struct {
+type objectAnalyticsJobInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	namespace        string
 }
 
-// NewFeatureExtractionServiceInformer constructs a new informer for FeatureExtractionService type.
+// NewObjectAnalyticsJobInformer constructs a new informer for ObjectAnalyticsJob type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFeatureExtractionServiceInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredFeatureExtractionServiceInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewObjectAnalyticsJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredObjectAnalyticsJobInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredFeatureExtractionServiceInformer constructs a new informer for FeatureExtractionService type.
+// NewFilteredObjectAnalyticsJobInformer constructs a new informer for ObjectAnalyticsJob type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredFeatureExtractionServiceInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredObjectAnalyticsJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SednaV1alpha1().FeatureExtractionServices(namespace).List(context.TODO(), options)
+				return client.SednaV1alpha1().ObjectAnalyticsJobs(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SednaV1alpha1().FeatureExtractionServices(namespace).Watch(context.TODO(), options)
+				return client.SednaV1alpha1().ObjectAnalyticsJobs(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&sednav1alpha1.FeatureExtractionService{},
+		&sednav1alpha1.ObjectAnalyticsJob{},
 		resyncPeriod,
 		indexers,
 	)
 }
 
-func (f *featureExtractionServiceInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredFeatureExtractionServiceInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+func (f *objectAnalyticsJobInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+	return NewFilteredObjectAnalyticsJobInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
-func (f *featureExtractionServiceInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&sednav1alpha1.FeatureExtractionService{}, f.defaultInformer)
+func (f *objectAnalyticsJobInformer) Informer() cache.SharedIndexInformer {
+	return f.factory.InformerFor(&sednav1alpha1.ObjectAnalyticsJob{}, f.defaultInformer)
 }
 
-func (f *featureExtractionServiceInformer) Lister() v1alpha1.FeatureExtractionServiceLister {
-	return v1alpha1.NewFeatureExtractionServiceLister(f.Informer().GetIndexer())
+func (f *objectAnalyticsJobInformer) Lister() v1alpha1.ObjectAnalyticsJobLister {
+	return v1alpha1.NewObjectAnalyticsJobLister(f.Informer().GetIndexer())
 }

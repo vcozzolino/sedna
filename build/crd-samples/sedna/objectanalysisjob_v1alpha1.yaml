@@ -1,0 +1,14 @@
+apiVersion: sedna.io/v1alpha1
+kind: ObjectAnalysisJob
+metadata:
+  name: object-analysis-job1
+spec:
+  videoUrls:
+    - videoUrl: "rtsp://192.168.1.1/video/0"
+      timeBase: 2022-04-18T10:00:00Z
+      startTimeSec: 0
+      endTimeSec: 1800
+    - videoUrl: "rtsp://192.168.1.1/video/1"
+      timeBase: 2022-04-18T10:00:00Z
+      startTimeSec: 0
+      endTimeSec: 1800
