@@ -1,0 +1,120 @@
+apiVersion: sedna.io/v1alpha1
+kind: MultiEdgeTrackingService
+metadata:
+  name: pedestrian-tracking
+spec:
+  kafkaSupport: false
+  objectQueryWorker:
+    backoffLimit: 5
+    template:
+      spec:
+        nodeSelector:
+          myapp: reid
+        containers:
+          - image: kubeedge/sedna-example-multi-edge-tracking-reid:v0.5.0
+            name: reid
+            imagePullPolicy: IfNotPresent
+            env:
+              - name: OBS_TOKEN
+                value: ""
+              - name: op_mode # can be one of covid19, tracking, or detection
+                value: covid19
+              - name: match_thresh # the matching threshold for the reid
+                value: "0.35"
+              - name: user_id # the user running the job
+                value: "synthetic"
+              - name: query_images # a list of images, separated by pipe (|)
+                value: "/data/network_shared/reid/query/1.jpg|/data/network_shared/reid/query/2.jpg|/data/network_shared/reid/query/3.jpg"
+            resources:
+              requests:
+                memory: 2Gi
+                cpu: 2000m
+            volumeMounts:
+              - name: vol1
+                mountPath: /data/network_shared/reid/
+        restartPolicy: Never
+        volumes:
+          - name: vol1
+            persistentVolumeClaim:
+              claimName: reid-pvc
+  videoAnalyticsWorker:
+    backoffLimit: 5
+    model:
+      name: detection-pedestrians-yolox
+    template:
+      spec:
+        nodeSelector:
+          myapp: reid
+        containers:
+          - image: kubeedge/sedna-example-multi-edge-tracking-videoanalytics:v0.5.0
+            imagePullPolicy: IfNotPresent
+            name:  detection
+            env:
+              - name: OBS_TOKEN
+                value: ""
+              - name: KAFKA_BIND_IPS  # a list of Kafka brokers IP, separated by pipe (|)
+                value: "MASTER_NODE_IP|kafka-service"
+              - name: KAFKA_BIND_PORTS # a list of Kafka brokers port, separated by pipe (|)
+                value: "9092|9092"
+              - name: "estimator_class" # only ByteTracker is currently supported
+                value: "ByteTracker"
+              - name: confidence_thr # ByteTracker NMS confidence threshold
+                value: "0.7"
+              - name: fps # video sampling rate, used only when processing a network stream
+                value: "5"
+              - name: "video_id" # the video id, can be any value
+                value: "0000-1111-2222"
+              - name: "video_address" # the video source can be rtsp (recommended), http, or a file loaded from NFS
+                value: "rtsp://RTSP_SERVER_IP/video/0" #rtsp://7.182.8.79/video/0
+              - name: op_mode # covid19
+                value: covid19
+              - name: hostname
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+            resources:
+              requests:
+                memory: 2Gi
+                cpu: 1000m
+              limits:
+                memory: 4Gi
+            volumeMounts:
+              - mountPath: /data/network_shared/reid/
+                name: vol1
+        restartPolicy: Never
+        volumes:
+          - name: vol1
+            persistentVolumeClaim:
+              claimName: reid-pvc
+  featureExtractionWorker:
+    replicas: 1
+    model:
+      name: feature-extraction-m3l
+    selector:
+      matchLabels:
+        app: feature-extraction
+    template:
+      metadata:
+        labels:
+          app: feature-extraction
+      spec:
+        nodeSelector:
+          myapp: reid
+        containers:
+          - image: kubeedge/sedna-example-multi-edge-tracking-feature-extraction:v0.5.0
+            imagePullPolicy: IfNotPresent
+            name: feature-extraction
+            env:
+              - name: KAFKA_BIND_IPS  # a list of Kafka brokers IP, separated by pipe (|)
+                value: "MASTER_NODE_IP|kafka-service"
+              - name: KAFKA_BIND_PORTS # a list of Kafka brokers port, separated by pipe (|)
+                value: "9092|9092"
+              - name: input_shape
+                value: "256,128"
+            resources:
+              requests:
+                memory: 0.5Gi
+                cpu: 500m
+              limits:
+                memory: 2Gi
+

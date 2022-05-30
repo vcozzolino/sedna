@@ -38,7 +38,7 @@ WORKDIR /home/work
 COPY ./lib /home/lib
 
 # Add M3L imports
-COPY examples/multiedgetracking/feature_extraction /home/work
+COPY examples/multiedgetracking/pedestrian_tracking/feature_extraction /home/work
 
 ENV PYTHONPATH "${PYTHONPATH}:/home/work"
 ENV LOG_LEVEL="INFO"

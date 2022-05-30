@@ -4,10 +4,12 @@ Estimated completion time: ~60-100 mins.
 
 Requirements:
 - K8s cluster
+- KubeEdge
 - Sedna
 - Internet connection to download the containers images
-- Optional: Kubeedge
 - Optional: multi-node cluster
+
+Follow the [Sedna installation document](/docs/setup/install.md) to install Sedna.
 
 # Introduction
 
@@ -17,13 +19,13 @@ However, our ReID solution is much more advanced as it does not require a galler
 
 The example images below show the ability of our system to re-identify a potential carrier of the virus and detect close contact proximity risk.
 
-![image info](./1.jpg) ![image info](./2.jpg)
+![image info](tutorial/1.jpg) ![image info](tutorial/2.jpg)
 
 # System Architecture and Components
 
 The image below shows the system architecture and its simplified workflow:
 
-![image info](./arch.png)
+![image info](tutorial/arch.png)
 
 ## Components
 
@@ -52,6 +54,8 @@ The image below shows the system architecture and its simplified workflow:
 - It loads the model defined by the CRD in the YAML file `yaml/models/model_detection.yaml`.
 
 # Build Phase
+
+[//]: #TODO: (we need to provide updated)
 
 Go to the `sedna/examples` directory and run: `./build_image.sh -r <your-docker-private-repo> multiedgetracking` to build the Docker images. Remember to **push** the images to your own Docker repository!
 

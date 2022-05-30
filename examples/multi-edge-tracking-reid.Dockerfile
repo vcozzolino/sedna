@@ -28,7 +28,7 @@ ENV PYTHONPATH "${PYTHONPATH}:/home/lib"
 WORKDIR /home/work
 COPY ./lib /home/lib
 
-COPY examples/multiedgetracking/reid /home/work/
+COPY examples/multiedgetracking/pedestrian_tracking/reid /home/work/
 
 ENV LOG_LEVEL="INFO"
 

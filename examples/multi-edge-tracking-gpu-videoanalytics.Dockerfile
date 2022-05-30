@@ -98,7 +98,7 @@ RUN pip install onnx protobuf==3.16.0
 WORKDIR /home/work
 COPY ./lib /home/lib
 
-COPY examples/multiedgetracking/detection/ /home/work/
+COPY examples/multiedgetracking/pedestrian_tracking/detection/ /home/work/
 
 ENV LOG_LEVEL="INFO"
 

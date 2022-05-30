@@ -36,7 +36,7 @@ ENV PYTHONPATH "${PYTHONPATH}:/home/lib"
 WORKDIR /home/work
 COPY ./lib /home/lib
 
-COPY examples/multiedgetracking/detection  /home/work/
+COPY examples/multiedgetracking/pedestrian_tracking/detection  /home/work/
 
 ENV LOG_LEVEL="DEBUG"
 
