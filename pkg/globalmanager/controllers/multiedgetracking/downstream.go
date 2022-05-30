@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package reid
+package multiedgetracking
 
 import (
 	"fmt"
@@ -25,8 +25,8 @@ import (
 	"github.com/kubeedge/sedna/pkg/globalmanager/runtime"
 )
 
-func (c *Controller) syncToEdge(eventType watch.EventType, obj interface{}) error {
-	job, ok := obj.(*sednav1.ReidJob)
+func (mc *Controller) syncToEdge(eventType watch.EventType, obj interface{}) error {
+	job, ok := obj.(*sednav1.LifelongLearningJob)
 	if !ok {
 		return nil
 	}
@@ -36,17 +36,20 @@ func (c *Controller) syncToEdge(eventType watch.EventType, obj interface{}) erro
 	// more details at https://github.com/kubernetes/kubernetes/issues/3030
 	job.Kind = KindName
 
-	nodeName := job.Spec.Template.Spec.NodeName
+	// Here only propagate to the nodes with non empty name
+
+	// FIXME(llhuii): only the case that all workers having the same nodeName are support,
+	// will support Spec.NodeSelector and differenect nodeName.
+	nodeName := job.Spec.TrainSpec.Template.Spec.NodeName
 	if len(nodeName) == 0 {
 		return fmt.Errorf("empty node name")
 	}
 
-	return c.sendToEdgeFunc(nodeName, eventType, job)
-
+	runtime.InjectSecretAnnotations(mc.kubeClient, job, job.Spec.CredentialName)
+	return mc.sendToEdgeFunc(nodeName, eventType, job)
 }
 
-func (c *Controller) SetDownstreamSendFunc(f runtime.DownstreamSendFunc) error {
-	c.sendToEdgeFunc = f
-
+func (mc *Controller) SetDownstreamSendFunc(f runtime.DownstreamSendFunc) error {
+	mc.sendToEdgeFunc = f
 	return nil
 }

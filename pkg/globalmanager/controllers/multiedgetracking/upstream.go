@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package featureextraction
+package multiedgetracking
 
 import (
 	"context"
@@ -78,8 +78,8 @@ func convertToMetrics(m map[string]interface{}) []sednav1.Metric {
 	return l
 }
 
-func (c *Controller) updateFeatureExtractionMetrics(name, namespace string, metrics []sednav1.Metric) error {
-	client := c.client.FeatureExtractionServices(namespace)
+func (mc *Controller) updateMultiEdgeTrackingMetrics(name, namespace string, metrics []sednav1.Metric) error {
+	client := mc.client.MultiEdgeTrackingServices(namespace)
 
 	return retryUpdateStatus(name, namespace, func() error {
 		joint, err := client.Get(context.TODO(), name, metav1.GetOptions{})
@@ -92,7 +92,7 @@ func (c *Controller) updateFeatureExtractionMetrics(name, namespace string, metr
 	})
 }
 
-func (c *Controller) updateFeatureExtractionFromEdge(name, namespace, operation string, content []byte) error {
+func (mc *Controller) updateMultiEdgeTrackingFromEdge(name, namespace, operation string, content []byte) error {
 	err := checkUpstreamOperation(operation)
 	if err != nil {
 		return err
@@ -120,7 +120,7 @@ func (c *Controller) updateFeatureExtractionFromEdge(name, namespace, operation 
 	output := status.Output
 	if output == nil || output.ServiceInfo == nil {
 		// no output info
-		klog.Warningf("empty status info for feature extraction service %s/%s", namespace, name)
+		klog.Warningf("empty status info for joint inference service %s/%s", namespace, name)
 		return nil
 	}
 
@@ -135,13 +135,13 @@ func (c *Controller) updateFeatureExtractionFromEdge(name, namespace, operation 
 
 	metrics := convertToMetrics(info)
 
-	err = c.updateFeatureExtractionMetrics(name, namespace, metrics)
+	err = mc.updateMultiEdgeTrackingMetrics(name, namespace, metrics)
 	if err != nil {
 		return fmt.Errorf("failed to update metrics, err:%+w", err)
 	}
 	return nil
 }
 
-func (c *Controller) SetUpstreamHandler(addFunc runtime.UpstreamHandlerAddFunc) error {
-	return addFunc(KindName, c.updateFeatureExtractionFromEdge)
+func (mc *Controller) SetUpstreamHandler(addFunc runtime.UpstreamHandlerAddFunc) error {
+	return addFunc(KindName, mc.updateMultiEdgeTrackingFromEdge)
 }
